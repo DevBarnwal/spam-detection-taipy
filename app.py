@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from taipy.gui import Gui
@@ -33,7 +34,7 @@ data = {
 df = pd.DataFrame(data)
 
 # -------------------------------
-# 2. Convert text to numbers
+# 2. Convert text to numeric vectors
 # -------------------------------
 
 vectorizer = CountVectorizer()
@@ -69,7 +70,7 @@ def check_spam(state):
         state.prediction_result = "✅ Not Spam"
 
 # -------------------------------
-# 6. UI
+# 6. UI Layout
 # -------------------------------
 
 page = """
@@ -77,7 +78,7 @@ page = """
 
 Enter Message:
 
-<|{input_message}|input|multiline=True|>
+<|{input_message}|input|multiline=True|label=Type your message here|>
 
 <br/>
 
@@ -85,17 +86,17 @@ Enter Message:
 
 <br/><br/>
 
-## Result:
+## Result
 <|{prediction_result}|text|>
 """
 
 # -------------------------------
-# 7. Run App
+# 7. Run Taipy App
 # -------------------------------
 
 Gui(page).run(
     title="Spam Detection App",
     host="0.0.0.0",
-    port=8080,
+    port=int(os.environ.get("PORT", 8080)),
     dark_mode=True
 )
